@@ -13,20 +13,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-# kdtree
+# dendro
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/kdtree)](https://CRAN.R-project.org/package=kdtree)
-[![Codecov test coverage](https://codecov.io/gh/mikemahoney218/kdtree/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mikemahoney218/kdtree?branch=main)
-[![R-CMD-check](https://github.com/mikemahoney218/kdtree/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mikemahoney218/kdtree/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/dendro)](https://CRAN.R-project.org/package=dendro)
+[![Codecov test coverage](https://codecov.io/gh/mikemahoney218/dendro/branch/main/graph/badge.svg)](https://app.codecov.io/gh/mikemahoney218/dendro?branch=main)
+[![R-CMD-check](https://github.com/mikemahoney218/dendro/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mikemahoney218/dendro/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of kdtree is to ...
+The goal of dendro is to ...
 
 ## Installation
 
-You can install the development version of kdtree like so:
+You can install the development version of dendro like so:
 
 ``` r
 # FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
@@ -37,7 +37,7 @@ You can install the development version of kdtree like so:
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-library(kdtree)
+library(dendro)
 ## basic example code
 ```
 
