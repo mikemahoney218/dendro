@@ -58,16 +58,17 @@ tree <- S7::new_class(
           length()
       }
     ),
+    node_indices = S7::new_property(
+      S7::class_integer,
+      getter = function(self) {
+        unlist(lapply(self@nodes, \(x) x@index))
+      }
+    ),
     next_idx = S7::new_property(
       S7::class_integer,
       getter = function(self) {
         if (self@size == 0) return(1L)
-        get_nodes(self) |>
-          vapply(
-            \(x) x@index,
-            integer(1)
-          ) |>
-          max() + 1L
+        max(self@node_indices) + 1L
       }
     ),
     root = S7::new_property(
