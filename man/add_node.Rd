@@ -6,6 +6,23 @@
 \usage{
 add_node(x, ...)
 }
+\arguments{
+\item{x}{The \code{\link[=tree]{tree()}} to add a \code{\link[=node]{node()}} to.}
+
+\item{value}{Any attributes or information to assign to the node.}
+
+\item{name}{Optional: a name to assign to the node's index.}
+
+\item{parent}{The parent node of the new node. Only one parentless node is
+allowed in a given tree.}
+}
+\value{
+A \code{\link[=tree]{tree()}} object.
+}
 \description{
 Add a node to a tree.
+}
+\examples{
+tree() |> add_node()
+
 }

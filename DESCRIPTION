@@ -8,7 +8,10 @@ Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Suggests: 
     covr,
-    testthat (>= 3.0.0)
+    glue,
+    rlang,
+    testthat (>= 3.0.0),
+    treemap
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -22,8 +25,9 @@ Collate:
     'classes.R'
     'add_node.R'
     'as_tree.R'
+    'dendro-package.R'
+    'drop_node.R'
     'get_children.R'
     'get_nodes.R'
-    'kdtree-package.R'
     'misc.R'
     'node_depth.R'

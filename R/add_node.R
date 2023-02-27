@@ -1,6 +1,15 @@
 #' Add a node to a tree.
 #'
+#' @param x The [tree()] to add a [node()] to.
+#' @param value Any attributes or information to assign to the node.
+#' @param name Optional: a name to assign to the node's index.
+#' @param parent The parent node of the new node. Only one parentless node is
+#' allowed in a given tree.
 #'
+#' @examples
+#' tree() |> add_node()
+#'
+#' @return A [tree()] object.
 #'
 #' @include classes.R
 #' @rdname add_node

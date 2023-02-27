@@ -1,5 +1,23 @@
+#' Calculate depth of a node in the tree
+#'
+#' @param x The tree to calculate node depth in.
+#' @param node_index The index of the node to calculate depth for
+#'
+#' @return The depth of the node as a numeric scalar.
+#'
+#' @examples
+#' tree() |>
+#'   add_node() |>
+#'   add_node(parent = 1L) |>
+#'   add_node(parent = 2L) |>
+#'   node_depth(3)
+#'
+#' @include classes.R
+#' @rdname node_depth
+#' @export node_depth
 node_depth <- S7::new_generic("node_depth", "x")
 
+#' @export node_depth
 method(node_depth, tree) <- function(x, node_index) {
   check_node_index(x, node_index)
 
@@ -15,8 +33,29 @@ method(node_depth, tree) <- function(x, node_index) {
 
 }
 
+#' Calculate distance between two nodes in a tree.
+#'
+#' @param x The tree to calculate distances within.
+#' @param from The index to calculate distance "from".
+#' @param to The index to calculate distance "to".
+#'
+#' @return Distance between nodes as a numeric scalar. If the nodes are not
+#' nested, returns NA. If `to` is above `from` in the tree, distance will be
+#' negative.
+#'
+#' @examples
+#' tree() |>
+#'   add_node() |>
+#'   add_node(parent = 1L) |>
+#'   add_node(parent = 2L) |>
+#'   distance_to_target(1, 3)
+#'
+#' @include classes.R
+#' @rdname distance_to_target
+#' @export distance_to_target
 distance_to_target <- S7::new_generic("distance_to_target", "x")
 
+#' @export distance_to_target
 method(distance_to_target, tree) <- function(x, from, to) {
   check_node_index(x, from)
   check_node_index(x, to)

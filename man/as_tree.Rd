@@ -2,10 +2,29 @@
 % Please edit documentation in R/as_tree.R
 \name{as_tree}
 \alias{as_tree}
-\title{Convert objects to tree format}
+\title{Convert a data frame to tree format}
 \usage{
 as_tree(x, ...)
 }
+\arguments{
+\item{x}{The data frame to convert.}
+
+\item{id_columns}{The columns to use to split the data frame into a tree,
+as a character vector. Should be ordered from least specific (upper branches)
+to most (lowest branches).}
+
+\item{root_name}{Optionally, the name of the root node.}
+
+\item{drop_id_columns}{Logical: Should the columns used to split the data
+frame into nodes be included as values in each node?}
+}
 \description{
-Convert objects to tree format
+Convert a data frame to tree format
+}
+\examples{
+\dontshow{if (rlang::is_installed("treemap")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(GNI2014, package = "treemap")
+as_tree(GNI2014, id_columns = c("continent"), root_name = "world")
+as_tree(GNI2014, id_columns = c("continent", "country"), root_name = "world")
+\dontshow{\}) # examplesIf}
 }

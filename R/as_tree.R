@@ -1,4 +1,12 @@
-#' Convert objects to tree format
+#' Convert a data frame to tree format
+#'
+#' @param x The data frame to convert.
+#' @param id_columns The columns to use to split the data frame into a tree,
+#' as a character vector. Should be ordered from least specific (upper branches)
+#' to most (lowest branches).
+#' @param root_name Optionally, the name of the root node.
+#' @param drop_id_columns Logical: Should the columns used to split the data
+#' frame into nodes be included as values in each node?
 #'
 #' @examplesIf rlang::is_installed("treemap")
 #' data(GNI2014, package = "treemap")
