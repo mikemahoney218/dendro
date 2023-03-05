@@ -21,6 +21,12 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Install S7
+        run: |
+          install.packages('remotes')
+          remotes::install_github("RConsortium/OOP-WG")
+        shell: Rscript {0}
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::covr
