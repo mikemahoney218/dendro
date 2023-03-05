@@ -22,37 +22,98 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/mikemahoney218/dendro/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mikemahoney218/dendro/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of dendro is to ...
+dendro is an experimental package I wrote to play around with tree structures and the new (as of this writing) [S7](https://github.com/RConsortium/OOP-WG/) class system. It's not intended for serious workloads, but rather as a way for me to kick the wheels on S7 and toy with recursive operations.
 
 ## Installation
 
 You can install the development version of dendro like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# install.packages("remotes")
+remotes::install_github("RConsortium/OOP-WG")
+remotes::install_github("mikemahoney218/dendro")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+The core of the dendro package lives in two S7 classes, `node()` and `tree()`. The node class has four slots: the index value of the node within the tree, the index of the node's parent, and the index of any children the node has, as well as a list slot for any attributes you want to attach to the node:
 
 ```{r example}
 library(dendro)
-## basic example code
+
+node(
+  index = 1L,
+  value = list(), 
+  parent = 0L,
+  children = 2L
+)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+Nodes are almost entirely unvalidated -- there's no requirement a parent knows about all its children, that a node's parent exists, that the node's index is unique, or that its index corresponds to its location in a tree. Node-creating code is responsible for those validations. 
 
-```{r cars}
-summary(cars)
+The tree class is slightly more interesting. Its constructor function takes a list of nodes:
+
+```{r}
+tree(list(node(1L)))
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+The tree class also doesn't do a ton of validation; it only checks to make sure that every node (save for one, the root node) has a parent. However, this class also comes with a few useful dynamic slots: `size`, the number of nodes in the tree; `node_indices`, a vector of all `index` values in the nodes list; `next_idx`, a safe position for the next node to be inserted at, and `root`, the index of the root node in the nodes list.
 
-You can also embed plots, for example:
+There's also a handful of methods defined for tree classes. For instance, `add_node()` will automatically add a node at the next available index, for programmatic tree construction:
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+```{r}
+example_tree <- tree() |>
+  add_node(name = "root") |>
+  add_node(list(), parent = 1L) |>
+  add_node(list(), parent = 1L) |>
+  add_node(list(), parent = 2L) |>
+  add_node(list(), parent = 4L)
+
+example_tree
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+Note that `add_node()` is relatively slow, as the tree is re-validated after each call to `add_node()`. To make an entirely new tree from scratch, it's usually faster to call `tree()` with a list of nodes instead.
+
+You can call `drop_node()` to drop nodes from the tree. Note that all descendants of the node will be dropped as well, as dendro doesn't allow multiple roots in a tree:
+
+```{r}
+example_tree |> 
+  drop_node(1)
+```
+
+```{r}
+# Get the depth of a node in the tree
+example_tree |> 
+  node_depth(5)
+
+# Get the distance between two nodes in the tree
+example_tree |> 
+  distance_to_target(1, 5)
+
+# Get the indices of the children for a node
+example_tree |> 
+  get_children(1)
+
+# Get the indices of _all_ descendants for a node
+example_tree |> 
+  get_all_descendants(1)
+
+# Get node objects from a tree
+example_tree |> 
+  get_nodes(1)
+
+# Get the value slot of a node object from a tree
+example_tree |> 
+  get_node_values(1)
+```
+
+There's also a function, `as_tree`, for converting data frames to tree formats:
+
+```{r}
+data.frame(x = letters[1:4], y = letters[25:26]) |> 
+  as_tree(c("x", "y"), root_name = "root")
+
+data.frame(x = letters[1:4], y = letters[25:26]) |> 
+  as_tree(c("y", "x"), root_name = "root")
+```
+

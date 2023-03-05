@@ -31,3 +31,5 @@ Collate:
     'get_nodes.R'
     'misc.R'
     'node_depth.R'
+Remotes:
+    RConsortium/OOP-WG
