@@ -16,8 +16,6 @@
 #' @export add_node
 add_node <- S7::new_generic("add_node", "x")
 
-
-#' @export add_node
 method(add_node, tree) <- function(x, value = data.frame(), name = NULL, parent = NA_integer_) {
   node_idx <- x@next_idx
 

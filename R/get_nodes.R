@@ -17,7 +17,6 @@
 #' @export get_nodes
 get_nodes <- S7::new_generic("get_node", "x")
 
-#' @export get_nodes
 method(get_nodes, tree) <- function(x, node_indices = NULL) {
   if (!is.null(node_indices)) {
     check_node_index(x, node_indices)
@@ -46,7 +45,6 @@ method(get_nodes, tree) <- function(x, node_indices = NULL) {
 #' @export get_node_values
 get_node_values <- S7::new_generic("get_node_values", "x")
 
-#' @export get_node_values
 method(get_node_values, tree) <- function(x, node_indices = NULL) {
   nodes <- x@nodes
   if (!is.null(node_indices)) {

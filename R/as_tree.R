@@ -29,48 +29,62 @@ method(as_tree, S7::class_data.frame) <- function(
 
   output <- tree() |> add_node(name = root_name)
 
-  iter <- 0
-  for (col_name in id_columns) {
-    iter <- iter + 1
-    if (iter == 1) {
-      x <- split(x, x[[col_name]])
+  node_ids <- unique(x[id_columns])
+  nodes <- vector("list", length = nrow(node_ids) + 1)
+  nodes[[1]] <- node(index = 1L, parent = NA_integer_)
+  names(nodes)[[1]] <- root_name
+
+  node_counter <- 2L
+  make_nodes <- function(x, id_columns, idx = 1L, parent_id = 1L) {
+    unique_vals <- unique(x[[id_columns[[idx]]]])
+
+    if (idx == length(id_columns)) {
+      for (lvl in unique_vals) {
+        nodes[[node_counter]] <<- node(
+          index = node_counter,
+          value = if (drop_id_columns) {
+            x[x[[id_columns[[idx]]]] == lvl, setdiff(names(x), id_columns)]
+          } else {
+            x[x[[id_columns[[idx]]]] == lvl, ]
+          },
+          parent = parent_id
+        )
+        names(nodes)[[node_counter]] <<- lvl
+
+        nodes[[parent_id]]@children <<- c(
+          nodes[[parent_id]]@children,
+          node_counter
+        )
+
+        node_counter <<- node_counter + 1L
+      }
     } else {
-      x <- lapply(x, \(y) split(y, y[[col_name]]))
+      for (lvl in unique_vals) {
+        nodes[[node_counter]] <<- node(
+          index = node_counter,
+          value = template,
+          parent = parent_id
+        )
+        names(nodes)[[node_counter]] <<- lvl
+
+        nodes[[parent_id]]@children <<- c(
+          nodes[[parent_id]]@children,
+          node_counter
+        )
+
+        node_counter <<- node_counter + 1L
+
+        make_nodes(
+          x[x[[id_columns[[idx]]]] == lvl, ],
+          id_columns,
+          idx = idx + 1L,
+          parent_id = node_counter - 1L
+        )
+      }
     }
   }
 
-  n_cols <- length(id_columns)
-  add_items <- function(lst, name, parent, depth = 1) {
-    if (depth == n_cols) {
-      col_names <- names(template)
-      if (drop_id_columns) col_names <- setdiff(col_names, id_columns)
-
-      output <<- add_node(
-        output,
-        lst[col_names],
-        name,
-        parent
-      )
-    } else {
-      output <<- add_node(output, template, name, parent)
-      mapply(
-        add_items,
-        lst = lst,
-        name = names(lst),
-        MoreArgs = list(parent = output@size, depth = depth + 1),
-        SIMPLIFY = FALSE
-      )
-    }
-  }
-
-  mapply(
-    add_items,
-    lst = x,
-    name = names(x),
-    MoreArgs = list(parent = output@size),
-    SIMPLIFY = FALSE
-  )
-
-  output
+  make_nodes(x, id_columns)
+  tree(nodes)
 
 }
